@@ -20,12 +20,12 @@ map <- resources %>%
   	addMiniMap() %>% 
   	addMeasure(primaryLengthUnit = 'kilometers') %>%
   	addCircleMarkers(~LON, ~LAT, color = ~cof(Type), fill = ~cof(Type), label = resources$Name, stroke = FALSE, fillOpacity = 0.5, clusterOptions = markerClusterOptions(), 
-  		popup = paste0('<b>', resources$Name, ': </b>', "<br>", 
-  						resources$Description, "<br>", 
+  		popup = paste0('<font size="1"> <b>', resources$Name, ': </font></b>', "<br>", 
+  						'<font size="2">', resources$Description, "</font> <br>", 
   						paste0("<img src = ", resources$Photo, " width='300' height='200'>"), "<br>", 
   						"<a href='", resources$Resources, "' target='_blank'>"
 		                 , "More info</a>"),
-    labelOptions = labelOptions(style = list("font-weight" = "normal", padding = "3px 8px", textsize = "20px", direction = "auto"))) %>%
+    labelOptions = labelOptions(style = list("font-weight" = "normal", padding = "3px 8px", textsize = "15px", direction = "auto"))) %>%
   	addLegend("bottomright", colors= c("#ffa500", "#13ED3F"), labels=c("Bushwalk", "Restaurants/Cafes"), title="Things to do") 
   	
 # bscols(filter_select("Location", "Location", resources_sd, ~Location))
