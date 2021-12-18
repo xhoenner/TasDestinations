@@ -5,6 +5,7 @@ Sys.setenv("OPENWEATHERMAP" = 'e8f90cc547708add27f4cfcf9fc851f6')
 
 resources <- read_excel('~/Downloads/WIP/TasDestinations/TasmaniaDestinations.xlsx')
 resources.type <- sort(unique(resources$Type))
+resources$AdditionalInfo[which(is.na(resources$AdditionalInfo))] <- ''
 cols <- brewer.pal(n = length(resources.type), name = "Paired")
 cof <- colorFactor(cols, domain= resources.type)
 
@@ -23,8 +24,9 @@ map <- resources %>%
   	addMiniMap() %>% 
   	addMeasure(primaryLengthUnit = 'kilometers') %>%
   	addCircleMarkers(~LON, ~LAT, color = ~cof(Type), fill = ~cof(Type), label = paste0(resources$Name, ' - ', resources$Type), stroke = FALSE, radius = 15, fillOpacity = .75, clusterOptions = markerClusterOptions(), 
-  		popup = paste0('<font size="3"> <b>', resources$Name, ': </font></b>', "<br>", 
+  		popup = paste0('<font size="3"> <b>', resources$Name, ': </font></b><br>', 
   						'<font size="2">', resources$Description, "<br>", 
+  						'<font size="2"> <b>', resources$AdditionalInfo, "</b> <br>", 
   						paste0("<img src = ", resources$Photo, " width='300' height='200'>"), "<br>", 
   						"<a href='", resources$Resources, "' target='_blank'>", "More info</a></font>"),
     labelOptions = labelOptions(textsize = "15px", direction = "auto"), group = 'Resources') %>%
