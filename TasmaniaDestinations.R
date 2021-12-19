@@ -1,13 +1,11 @@
 rm(list=ls())
 
-library(leaflet); library(mapview); library(readxl); library(leaflet.extras); library(leaflet.extras2);
+library(leaflet); library(mapview); library(readxl); library(leaflet.extras); library(leaflet.extras2); library(dplyr); library(RColorBrewer)
 Sys.setenv("OPENWEATHERMAP" = 'e8f90cc547708add27f4cfcf9fc851f6')
 
-resources <- read_excel('~/Downloads/WIP/TasDestinations/TasmaniaDestinations.xlsx')
-resources.type <- sort(unique(resources$Type))
-resources$AdditionalInfo[which(is.na(resources$AdditionalInfo))] <- ''
-cols <- brewer.pal(n = length(resources.type), name = "Paired")
-cof <- colorFactor(cols, domain= resources.type)
+resources <- read_excel('~/Downloads/WIP/TasDestinations/TasmaniaDestinations.xlsx') ## To insert GoogleDrive images, just add the photo id at the end of https://drive.google.com/uc?export=view&id=
+resources.type <- sort(unique(resources$Type)); resources$AdditionalInfo[which(is.na(resources$AdditionalInfo))] <- ''
+cols <- brewer.pal(n = length(resources.type), name = "Paired"); cof <- colorFactor(cols, domain= resources.type)
 
 map <- resources %>% 
 	leaflet(options = leafletOptions(preferCanvas = TRUE)) %>%
@@ -23,7 +21,8 @@ map <- resources %>%
     addResetMapButton() %>%
   	addMiniMap() %>% 
   	addMeasure(primaryLengthUnit = 'kilometers') %>%
-  	addCircleMarkers(~LON, ~LAT, color = ~cof(Type), fill = ~cof(Type), label = paste0(resources$Name, ' - ', resources$Type), stroke = FALSE, radius = 15, fillOpacity = .75, clusterOptions = markerClusterOptions(), 
+  	addCircleMarkers(~LON, ~LAT, color = ~cof(Type), fill = ~cof(Type), label = paste0(resources$Name, ' - ', resources$Type), stroke = TRUE, radius = 15, fillOpacity = .75, 
+  		clusterOptions = markerClusterOptions(), 
   		popup = paste0('<font size="3"> <b>', resources$Name, ': </font></b><br>', 
   						'<font size="2">', resources$Description, "<br>", 
   						'<font size="2"> <b>', resources$AdditionalInfo, "</b> <br>", 
@@ -32,4 +31,4 @@ map <- resources %>%
     labelOptions = labelOptions(textsize = "15px", direction = "auto"), group = 'Resources') %>%
   	addLegend("bottomright", colors= cols, labels= resources.type, title= "Things to do")
   	
-mapshot(map, url = '~/Downloads/WIP/TasDestinations/index.html', title="Favourite Tasmanian Destinations")
+mapshot(map, url = '~/Downloads/WIP/TasDestinations/index.html', title="TasDestinations")
