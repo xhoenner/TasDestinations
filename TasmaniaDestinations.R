@@ -5,7 +5,7 @@ Sys.setenv("OPENWEATHERMAP" = 'e8f90cc547708add27f4cfcf9fc851f6')
 
 resources <- read_excel('~/Downloads/WIP/TasDestinations/TasmaniaDestinations.xlsx') ## To insert GoogleDrive images, just add the photo id at the end of https://drive.google.com/uc?export=view&id=
 resources.type <- sort(unique(resources$Type)); resources$AdditionalInfo[which(is.na(resources$AdditionalInfo))] <- ''
-cols <- brewer.pal(n = length(resources.type), name = "Paired"); cof <- colorFactor(cols, domain= resources.type)
+cols <- brewer.pal(n = length(resources.type), name = "Paired"); cols[1] <- '#15dcfe'; cof <- colorFactor(cols, domain= resources.type)
 
 map <- resources %>% 
 	leaflet(options = leafletOptions(preferCanvas = TRUE)) %>%
