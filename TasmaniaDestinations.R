@@ -1,12 +1,26 @@
 rm(list=ls())
 
+## Load libraries and set up environment
 library(leaflet); library(mapview); library(readxl); library(leaflet.extras); library(leaflet.extras2); library(dplyr); library(RColorBrewer)
 Sys.setenv("OPENWEATHERMAP" = 'e8f90cc547708add27f4cfcf9fc851f6')
+setwd('~/Documents/PersonalStuff/')
 
-resources <- read_excel('~/Downloads/WIP/TasDestinations/TasmaniaDestinations.xlsx') ## To insert GoogleDrive images, just add the photo id at the end of https://drive.google.com/uc?export=view&id=
+## Read config file
+resources <- read_excel('TasDestinations/TasmaniaDestinations.xlsx') ## To insert GoogleDrive images, just add the photo id at the end of https://lh3.googleusercontent.com/d/
 resources.type <- sort(unique(resources$Type)); resources$AdditionalInfo[which(is.na(resources$AdditionalInfo))] <- ''
-cols <- brewer.pal(n = length(resources.type), name = "Paired"); cols[1] <- '#15dcfe'; cof <- colorFactor(cols, domain= resources.type)
+cols <- brewer.pal(n = length(resources.type), name = "Paired"); cols[1] <- '#15dcfe'; cof <- colorFactor(cols, domain= resources.type);
 
+## Validate all URLs in Excel spreadsheet - takes about 2 minutes for each run
+valid_url <- function(url_in,t=2){
+  con <- url(url_in)
+  check <- suppressWarnings(try(open.connection(con,open="rt",timeout=t),silent=T)[1])
+  suppressWarnings(try(close.connection(con),silent=T))
+  ifelse(is.null(check),TRUE,FALSE)
+}
+sapply(resources$Photo,valid_url); ## Photos
+sapply(resources$Resources,valid_url); ## Additional info
+
+## Generate map
 map <- resources %>% 
 	leaflet(options = leafletOptions(preferCanvas = TRUE)) %>%
     addProviderTiles(providers$OpenStreetMap, group = "OpenStreetMap", options = providerTileOptions(updateWhenZooming = FALSE, updateWhenIdle = FALSE)) %>% 
@@ -29,6 +43,6 @@ map <- resources %>%
   						paste0("<img src = ", resources$Photo, " width='300' height='200'>"), "<br>", 
   						"<a href='", resources$Resources, "' target='_blank'>", "More info</a></font>"),
     labelOptions = labelOptions(textsize = "15px", direction = "auto"), group = 'Resources') %>%
-  	addLegend("bottomright", colors= cols, labels= resources.type, title= "Things to do")
+  	addLegend("bottomright", colors= cols, labels= resources.type, title= "Things to do"); ## Export Map from Viewer tab as index.html in RStudio
   	
-mapshot(map, url = '~/Downloads/WIP/TasDestinations/index.html', title="TasDestinations")
+# mapshot(map, url = '~/Documents/PersonalStuff/TasDestinations/index.html', title="TasDestinations"); ## Somehow not functional anymore...
