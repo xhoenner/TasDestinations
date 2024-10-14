@@ -17,8 +17,9 @@ valid_url <- function(url_in,t=2){
   suppressWarnings(try(close.connection(con),silent=T))
   ifelse(is.null(check),TRUE,FALSE)
 }
-sapply(resources$Photo,valid_url); ## Photos
-sapply(resources$Resources,valid_url); ## Additional info
+tmp <- sapply(resources$Photo,valid_url); which(!tmp); ## Photos
+tmp <- sapply(resources$Resources,valid_url); which(!tmp); ## Additional info
+rm(tmp);
 
 ## Generate map
 map <- resources %>% 
@@ -43,6 +44,7 @@ map <- resources %>%
   						paste0("<img src = ", resources$Photo, " width='300' height='200'>"), "<br>", 
   						"<a href='", resources$Resources, "' target='_blank'>", "More info</a></font>"),
     labelOptions = labelOptions(textsize = "15px", direction = "auto"), group = 'Resources') %>%
+    addScaleBar(position = 'bottomleft', options = scaleBarOptions(maxWidth = 200, metric = TRUE, imperial = FALSE, updateWhenIdle = TRUE)) %>%
   	addLegend("bottomright", colors= cols, labels= resources.type, title= "Things to do"); ## Export Map from Viewer tab as index.html in RStudio
   	
 # mapshot(map, url = '~/Documents/PersonalStuff/TasDestinations/index.html', title="TasDestinations"); ## Somehow not functional anymore...

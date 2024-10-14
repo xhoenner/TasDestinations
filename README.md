@@ -5,7 +5,6 @@ Most photos are my own, unless it's a place I haven't visited or haven't bothere
 Feel free to contribute to this project by dropping me a line!
 
 ## To do list
-	1. Use own photos whenever possible, see Photo attribute in XLSX file that don't start with a drive.google.com URL
-	2. Add URLs for more resources at the bottom of the map and statement to assume no responsibility, at your own risk, and that the site is updated infrequently
-	3. Review content, incl. prices? Or just say prices as of 2022?
-	4. Ability to filter by activity!
+	1. Add URLs for more resources at the bottom of the map and statement to assume no responsibility, at your own risk, and that the site is updated infrequently
+	2. Review content, incl. prices? Or just say prices as of 2022?
+	3. Ability to filter by activity!
